@@ -114,6 +114,8 @@
     openBriefing(key) {
       this.levelKey = key;
       this.state = "briefing";
+      // fresh build so the briefing panel sits over the actual mission level
+      this._buildLevel(key);
       this.ui.showBriefing(this.levelKey);
     }
 
