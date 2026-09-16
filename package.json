@@ -1,0 +1,10 @@
+{
+  "name": "bloody-heist",
+  "version": "0.1.0",
+  "description": "BLOODY HEIST — original isometric 2.5D tactical heist shooter (Three.js)",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8000 --bind 0.0.0.0",
+    "test": "node test/smoke.js"
+  }
+}

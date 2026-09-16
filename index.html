@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLOODY HEIST — Isometric Tactical Heist</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- ============ HUD ============ -->
+    <div id="hud" class="hidden">
+      <div id="hud-top">
+        <div id="hud-objectives" class="hud-panel">
+          <div id="hud-mission-title"></div>
+          <ul id="hud-obj-list"></ul>
+        </div>
+        <div id="hud-stats" class="hud-panel">
+          <div class="stat"><span class="stat-label">TIME</span><span id="stat-time">0:00</span></div>
+          <div class="stat"><span class="stat-label">KILLS</span><span id="stat-kills">0</span></div>
+          <div class="stat"><span class="stat-label">SCORE</span><span id="stat-score">0</span></div>
+        </div>
+      </div>
+
+      <div id="hud-bottom">
+        <div id="char-strip"></div>
+        <div id="rewind-panel" class="hud-panel">
+          <div id="rewind-top-row">
+            <span id="rewind-char-name"></span>
+            <span id="rewind-hint">HOLD <b>R</b></span>
+          </div>
+          <div id="rewind-bar"><div id="rewind-fill"></div></div>
+          <div id="rewind-window"><div id="rewind-window-fill"></div></div>
+        </div>
+      </div>
+
+      <div id="objective-toast"></div>
+      <div id="crosshair" class="hidden"><i></i><i></i><i></i><i></i><b id="crosshair-dot"></b></div>
+      <div id="hitmarker" class="hidden"></div>
+      <div id="damage-vignette"></div>
+      <div id="low-hp-overlay"></div>
+      <div id="rewind-overlay"></div>
+      <div id="interact-hint" class="hidden"></div>
+    </div>
+
+    <!-- ============ MAIN MENU ============ -->
+    <div id="menu" class="screen">
+      <div class="menu-inner">
+        <div id="menu-title-wrap">
+          <div id="menu-kicker">AN ORIGINAL TACTICAL HEIST</div>
+          <h1 id="menu-title">BLOODY<span>HEIST</span></h1>
+          <div id="menu-sub">Four criminals. One night. Five seconds to regret nothing.</div>
+        </div>
+        <div id="menu-buttons">
+          <button class="btn btn-primary" id="btn-new-game">NEW GAME</button>
+          <button class="btn" id="btn-continue">CONTINUE</button>
+          <button class="btn" id="btn-settings">SETTINGS</button>
+          <button class="btn" id="btn-controls">CONTROLS</button>
+          <button class="btn" id="btn-quit">QUIT</button>
+        </div>
+        <div id="menu-footer">Keyboard + mouse · Gamepad supported · Rewind time with R</div>
+      </div>
+    </div>
+
+    <!-- ============ MISSION BRIEFING ============ -->
+    <div id="briefing" class="screen hidden">
+      <div class="panel wide">
+        <div id="brief-kicker">MISSION INTEL</div>
+        <h2 id="brief-title"></h2>
+        <p id="brief-desc"></p>
+        <div id="brief-obj-head">OBJECTIVES</div>
+        <ul id="brief-obj-list"></ul>
+        <div id="brief-roster-head">YOUR CREW</div>
+        <div id="brief-roster"></div>
+        <div id="brief-buttons">
+          <button class="btn" id="btn-brief-back">BACK</button>
+          <button class="btn btn-primary" id="btn-brief-start">START MISSION</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PAUSE ============ -->
+    <div id="pause" class="screen hidden">
+      <div class="panel">
+        <div id="pause-kicker">PAUSED</div>
+        <h2>THE CLOCK IS STOPPED</h2>
+        <div id="pause-buttons">
+          <button class="btn btn-primary" id="btn-resume">RESUME</button>
+          <button class="btn" id="btn-restart">RESTART MISSION</button>
+          <button class="btn" id="btn-settings-2">SETTINGS</button>
+          <button class="btn" id="btn-main-menu">MAIN MENU</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ VICTORY ============ -->
+    <div id="victory" class="screen hidden">
+      <div class="panel">
+        <div id="victory-kicker">HEIST COMPLETE</div>
+        <h2 id="victory-title">THEY'LL BE TALKING ABOUT THIS ONE</h2>
+        <div id="victory-stats"></div>
+        <div id="victory-buttons">
+          <button class="btn" id="btn-vic-restart">REPLAY MISSION</button>
+          <button class="btn btn-primary" id="btn-vic-next">NEXT MISSION</button>
+          <button class="btn" id="btn-vic-menu">MAIN MENU</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ DEFEAT ============ -->
+    <div id="defeat" class="screen hidden">
+      <div class="panel">
+        <div id="defeat-kicker" class="kicker-red">MISSION FAILED</div>
+        <h2 id="defeat-title">THE HEIST WENT COLD</h2>
+        <div id="defeat-stats"></div>
+        <div id="defeat-buttons">
+          <button class="btn" id="btn-def-menu">MAIN MENU</button>
+          <button class="btn btn-primary" id="btn-def-retry">RETRY MISSION</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ MODALS ============ -->
+    <div id="modal" class="screen hidden">
+      <div class="panel">
+        <h2 id="modal-title"></h2>
+        <div id="modal-body"></div>
+        <div id="modal-buttons">
+          <button class="btn btn-primary" id="btn-modal-close">CLOSE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="vendor/three.min.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/effects.js"></script>
+  <script src="js/characters.js"></script>
+  <script src="js/actor.js"></script>
+  <script src="js/weapons.js"></script>
+  <script src="js/enemy.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/rewind.js"></script>
+  <script src="js/world/world.js"></script>
+  <script src="js/world/warehouse.js"></script>
+  <script src="js/world/street.js"></script>
+  <script src="js/world/bank.js"></script>
+  <script src="js/missions.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
